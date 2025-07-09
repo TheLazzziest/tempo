@@ -26,7 +26,9 @@ class TestUserListTestCase(APITestCase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     def test_post_request_with_valid_data_succeeds(self):
-        response = self.client.post(self.url, self.user_data)
+        response = self.client.post(
+            self.url, {"data": {"type": "User", "attributes": self.user_data}}
+        )
         assert response.status_code == status.HTTP_201_CREATED
 
         user = User.objects.get(pk=response.data.get("id"))
@@ -50,7 +52,13 @@ class TestUserDetailTestCase(APITestCase):
 
     def test_put_request_updates_a_user(self):
         new_first_name = fake.first_name()
-        payload = {"first_name": new_first_name}
+        payload = {
+            "data": {
+                "type": "User",
+                "id": self.user.pk,
+                "attributes": {"first_name": new_first_name},
+            }
+        }
         response = self.client.put(self.url, payload)
         assert response.status_code == status.HTTP_200_OK
 
