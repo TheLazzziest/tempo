@@ -33,6 +33,10 @@ pytest
 ```
 6. Create a superuser to login to the admin:
 ```bash
-DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput --username admin --email admin@local.host --password --skip-checks
+DJANGO_SUPERUSER_PASSWORD=admin uv run manage.py createsuperuser --noinput --username admin --email admin@local.host --skip-checks
 ```
-7. You're ready to go ✔️
+7. Run API server
+```bash
+uv run manage.py runserver
+```
+8. You're ready to go tot `http://127.0.0.1:8000/docs/` ✔️
