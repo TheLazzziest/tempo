@@ -4,4 +4,46 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "dj-database-url==2.3.0",
+    "django==5.1.7",
+    "django-configurations==2.5.1",
+    "django-filter==24.3",
+    "django-model-utils==5.0.0",
+    "django-silk>=5.4.0",
+    "django-storages>=1.14.6",
+    "django-unique-upload==0.2.1",
+    "djangorestframework==3.15.2",
+    "mkdocs==1.6.1",
+    "psycopg2-binary==2.9.10",
+    "uvicorn>=0.35.0",
+]
+
+[dependency-groups]
+development = [
+    "ipython>=8.30.0",
+    "pre-commit>=4.2.0",
+    "ruff>=0.12.2",
+]
+testing = [
+    "coverage>=7.6.9",
+    "factory-boy>=3.3.1",
+    "faker>=37.4.0",
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "pytest-django>=4.9.0",
+]
+
+[tool.ruff]
+exclude = [".venv", "migrations"]
+
+[tool.ruff.lint]
+ignore = ["E226","E302","E401","E702","E711"]
+
+[tool.ruff.lint.pycodestyle]
+max-line-length = 110
+
+[tool.pytest.ini_options]
+DJANGO_CONFIGURATION = "Local"
+DJANGO_SETTINGS_MODULE = "broker.config.development"
+python_files = ["test_*.py", "*_test.py"]
