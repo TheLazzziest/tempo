@@ -1,0 +1,39 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+    -   id: trailing-whitespace
+    -   id: end-of-file-fixer
+    -   id: check-yaml
+    -   id: check-toml
+    -   id: check-added-large-files
+
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.2
+    hooks:
+    # Run the linter.
+    - id: ruff-check
+      types_or: [ python, pyi ]
+      args: [--fix, --exit-non-zero-on-fix]
+    # Run the formatter.
+    - id: ruff-format
+      types_or: [ python, pyi ]
+
+-   repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+    -   id: hadolint
+        name: Lint Dockerfile
+
+-   repo: local
+    hooks:
+    -   id: pytest-django
+        stages: [manual]
+        name: Run Django tests
+        entry: pytest
+        language: python
+        types_or: [python, toml, yaml] # Run tests if code or config changes
+        pass_filenames: false
+        # Note: Running the full test suite on every commit can be slow.
