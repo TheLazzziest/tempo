@@ -1,0 +1,39 @@
+services:
+  postgres:
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    ports:
+      - "5432:5432"
+    image: postgres:16.4
+
+  mailcrab:
+    environment:
+      - name=value
+    ports:
+      - "1080:1080"
+      - "1025:1025"
+    image: marlonb/mailcrab:latest
+
+  web:
+    restart: always
+    env_file:
+      - .env.dockerized
+    build: ./
+    command: >
+      bash -c "python3 -m manage runserver 0.0.0.0:8000"
+    volumes:
+      - ./:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - mailcrab
+
+  documentation:
+    restart: always
+    build: ./
+    command: "python3 -m mkdocs serve"
+    volumes:
+      - ./:/code
+    ports:
+      - "8001:8001"
