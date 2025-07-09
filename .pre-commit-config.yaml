@@ -30,10 +30,9 @@ repos:
 -   repo: local
     hooks:
     -   id: pytest-django
-        stages: [manual]
+        stages: [pre-push]
         name: Run Django tests
         entry: pytest
         language: python
         types_or: [python, toml, yaml] # Run tests if code or config changes
         pass_filenames: false
-        # Note: Running the full test suite on every commit can be slow.
