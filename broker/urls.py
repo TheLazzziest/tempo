@@ -8,11 +8,15 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from rest_framework.schemas import get_schema_view
 from rest_framework_json_api.schemas.openapi import SchemaGenerator
+
+from .blockchains.views import TXViewSet, WalletViewSet
 from .users.views import UserViewSet
 
 
 router = DefaultRouter()
 router.register(r"users", UserViewSet)
+router.register(r"wallets", WalletViewSet)
+router.register(r"transactions", TXViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
