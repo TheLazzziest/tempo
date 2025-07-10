@@ -2,13 +2,11 @@ from django.urls import reverse
 from django.contrib.auth.hashers import check_password
 from rest_framework.test import APITestCase
 from rest_framework import status
-from faker import Faker
 import factory
 import pytest
+from broker.conftest import fake
 from ..models import User
 from .factories import UserFactory
-
-fake = Faker()
 
 
 @pytest.mark.django_db
