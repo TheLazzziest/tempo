@@ -13,10 +13,12 @@ dependencies = [
     "django-silk>=5.4.0",
     "django-storages>=1.14.6",
     "django-unique-upload==0.2.1",
+    "django-uuid7>=0.1.1",
     "djangorestframework==3.15.2",
     "djangorestframework-jsonapi[django-filter,openapi]>=7.1.0",
     "mkdocs==1.6.1",
     "psycopg2-binary==2.9.10",
+    "uuid-utils>=0.11.0",
     "uvicorn>=0.35.0",
 ]
 
@@ -47,4 +49,5 @@ max-line-length = 110
 [tool.pytest.ini_options]
 DJANGO_CONFIGURATION = "Local"
 DJANGO_SETTINGS_MODULE = "broker.config.development"
+django_debug_mode = true
 python_files = ["test_*.py", "*_test.py"]
