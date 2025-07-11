@@ -8,7 +8,7 @@ class WalletFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("id", "label", "balance")
 
     id = factory.Sequence(
-        lambda n: uuid.uuid7(n)
+        lambda n: str(uuid.uuid7(n))
     )  # @TODO: Implement custom sequence for uuid7
     label = factory.Sequence(lambda n: f"Wallet {n}")
     balance = factory.Faker("pydecimal", left_digits=8, right_digits=18, positive=True)
@@ -28,7 +28,7 @@ class TXFactory(factory.django.DjangoModelFactory):
         model = "blockchains.TX"
         django_get_or_create = ("id", "txid", "amount")
 
-    id = factory.Sequence(lambda n: uuid.uuid7(n))
+    id = factory.Sequence(lambda n: str(uuid.uuid7(n)))
     wallet = factory.SubFactory(WalletFactory)
     txid = factory.Faker("sha256")
     amount = factory.Faker("pydecimal", left_digits=7, right_digits=18, positive=True)
