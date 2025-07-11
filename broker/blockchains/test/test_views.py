@@ -356,3 +356,48 @@ def test_wallet_balance_cannot_go_below_zero(
     # Verify that the wallet balance has not changed
     updated_wallet = Wallet.objects.get(pk=wallet.id)
     assert updated_wallet.balance == Decimal("5.00")
+
+
+@pytest.mark.django_db
+def test_wallet_list_pagination(authorized_api_client: APIClient, default_user: User):
+    # Create 25 wallets for pagination testing
+    for i in range(25):
+        WalletFactory(user=default_user, label=f"Wallet {i}")
+
+    # Test default pagination (page_size=10)
+    response = authorized_api_client.get(reverse("wallet-list"))
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()["data"]) == 10
+    assert response.json()["meta"]["pagination"]["count"] == 25
+
+    # Test second page
+    response = authorized_api_client.get(reverse("wallet-list"), {"page[number]": 2})
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()["data"]) == 10
+
+    # Test custom page size
+    response = authorized_api_client.get(reverse("wallet-list"), {"page[size]": 5})
+    assert response.status_code == status.HTTP_200_OK
+    assert len(response.json()["data"]) == 5
+
+
+@pytest.mark.django_db
+def test_wallet_list_sorting(authorized_api_client: APIClient, default_user: User):
+    # Create wallets with different labels for sorting
+    WalletFactory(user=default_user, label="Wallet C")
+    WalletFactory(user=default_user, label="Wallet A")
+    WalletFactory(user=default_user, label="Wallet B")
+
+    # Test sorting by label ascending
+    response = authorized_api_client.get(reverse("wallet-list"), {"sort": "label"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["data"][0]["attributes"]["label"] == "Wallet A"
+    assert response.json()["data"][1]["attributes"]["label"] == "Wallet B"
+    assert response.json()["data"][2]["attributes"]["label"] == "Wallet C"
+
+    # Test sorting by label descending
+    response = authorized_api_client.get(reverse("wallet-list"), {"sort": "-label"})
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()["data"][0]["attributes"]["label"] == "Wallet C"
+    assert response.json()["data"][1]["attributes"]["label"] == "Wallet B"
+    assert response.json()["data"][2]["attributes"]["label"] == "Wallet A"
