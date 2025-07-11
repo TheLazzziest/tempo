@@ -21,7 +21,7 @@ router.register(r"transactions", TXViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/", include(router.urls)),
-    path("api-token-auth/", views.obtain_auth_token),
+    path("api/v1/auth/token/", views.obtain_auth_token),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     path("silk/", include("silk.urls", namespace="silk")),
     path(
