@@ -1,7 +1,7 @@
 import os
 from os.path import join
-import dj_database_url
 from configurations import Configuration
+import psycopg2
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,6 +22,7 @@ class Common(Configuration):
         "silk",  # for API troubleshooting
         # Your apps
         "broker.users",
+        "broker.blockchains",
     )
 
     # https://docs.djangoproject.com/en/2.0/topics/http/middleware/
@@ -48,17 +49,19 @@ class Common(Configuration):
 
     # Postgres
     DATABASES = {
-        "default": dj_database_url.config(
-            default=(
-                "postgres://"
-                f"{os.environ['DJANGO_POSTGRES_USER']}:{os.environ['DJANGO_POSTGRES_PASSWORD']}"
-                "@"
-                f"{os.environ['DJANGO_POSTGRES_HOST']}:{os.getenv('DJANGO_POSTGRES_PORT', 5432)}"
-                "/"
-                f"{os.environ['DJANGO_POSTGRES_DB']}"
-            ),
-            conn_max_age=int(os.getenv("DJANGO_POSTGRES_CONN_MAX_AGE", 600)),
-        )
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ["DJANGO_POSTGRES_DB"],
+            "USER": os.environ["DJANGO_POSTGRES_USER"],
+            "PASSWORD": os.environ["DJANGO_POSTGRES_PASSWORD"],
+            "HOST": os.environ["DJANGO_POSTGRES_HOST"],
+            "PORT": int(os.getenv("DJANGO_POSTGRES_PORT", 5432)),
+            "CONN_MAX_AGE": int(os.getenv("DJANGO_POSTGRES_CONN_MAX_AGE", 600)),
+            "ATOMIC_REQUESTS": True,
+            "OPTIONS": {
+                "isolation_level": psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED,
+            },
+        }
     }
 
     # General
