@@ -3,7 +3,7 @@
 import django.core.validators
 import django.db.models.deletion
 import django_uuid7.fields
-import uuid_utils._uuid_utils
+import uuid_utils
 from decimal import Decimal
 from django.conf import settings
 from django.db import migrations, models
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Wallet',
             fields=[
-                ('id', django_uuid7.fields.UUID7Field(default=uuid_utils._uuid_utils.uuid7, primary_key=True, serialize=False)),
+                ('id', django_uuid7.fields.UUID7Field(default=uuid_utils.uuid7, primary_key=True, serialize=False)),
                 ('label', models.CharField(db_comment='A human-readable name for the wallet.', max_length=255)),
                 ('balance', models.DecimalField(db_comment='The current balance of the wallet, derived from the sum of its transactions.', decimal_places=18, max_digits=26, validators=[django.core.validators.MinValueValidator(Decimal('0.0'), message='Balance cannot be less than 0')])),
                 ('status', models.CharField(choices=[('A', 'Active'), ('D', 'Disabled'), ('S', 'Suspended')], db_comment='The current status of the wallet.', default='A', max_length=1)),
@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TX',
             fields=[
-                ('id', django_uuid7.fields.UUID7Field(default=uuid_utils._uuid_utils.uuid7, primary_key=True, serialize=False)),
+                ('id', django_uuid7.fields.UUID7Field(default=uuid_utils.uuid7, primary_key=True, serialize=False)),
                 ('txid', models.CharField(db_comment='The unique transaction identifier (hash) from the blockchain.', editable=False, max_length=100, unique=True, validators=[django.core.validators.RegexValidator('^[xa-fA-F0-9-]{64,100}$')])),
                 ('amount', models.DecimalField(db_comment='The value of the transaction, can be positive or negative.', decimal_places=18, editable=False, max_digits=26)),
                 ('wallet', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='blockchains.wallet')),
