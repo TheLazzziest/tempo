@@ -30,5 +30,5 @@ class TXFactory(factory.django.DjangoModelFactory):
 
     id = factory.Sequence(lambda n: str(uuid.uuid7(n)))
     wallet = factory.SubFactory(WalletFactory)
-    txid = factory.Faker("sha256")
+    txid = factory.Faker("sha256")  # @TODO: Fix the txid generator
     amount = factory.Faker("pydecimal", left_digits=7, right_digits=18, positive=True)

@@ -173,7 +173,7 @@ def test_delete_request_fails_for_wallet_with_transactions(
                 "type": "TX",
                 "attributes": {
                     "wallet": str(wallet.pk),
-                    "txid": transaction.txid,
+                    "txid": "0x037d4e123efdfcd382f99d961f048ff289af712c3b2f3c8bb142f19441a2f067",
                     "amount": str(transaction.amount),
                 },
             }
@@ -183,7 +183,9 @@ def test_delete_request_fails_for_wallet_with_transactions(
 
     tx = TX.objects.get(pk=response.data.get("id"))
     assert tx.wallet == wallet
-    assert tx.txid == transaction.txid
+    assert (
+        tx.txid == "0x037d4e123efdfcd382f99d961f048ff289af712c3b2f3c8bb142f19441a2f067"
+    )
     assert tx.amount == transaction.amount
 
     # Attempt to delete the wallet
